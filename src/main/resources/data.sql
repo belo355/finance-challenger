@@ -1,0 +1,2 @@
+INSERT INTO RECEITA VALUES (1, '01/01/2022', 'Salario', '1000');
+

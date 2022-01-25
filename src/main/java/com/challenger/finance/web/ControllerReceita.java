@@ -1,5 +1,6 @@
 package com.challenger.finance.web;
 
+import com.challenger.finance.receita.Receita;
 import com.challenger.finance.receita.ReceitaDto;
 import com.challenger.finance.receita.ReceitaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,7 @@ public class ControllerReceita {
 
     @GetMapping("/receitas")
     public ResponseEntity getTeste(){
-        List<ReceitaDto> receitas = receitaService.getReceitas();
+        List<Receita> receitas = receitaService.getReceitas();
         return ResponseEntity.ok(receitas);
     }
 }

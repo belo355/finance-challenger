@@ -1,0 +1,8 @@
+--DROP TABLE IF EXISTS RECEITA;
+CREATE TABLE RECEITA (
+receita_id int PRIMARY KEY,
+data_receita VARCHAR(50) NOT NULL,
+descricao VARCHAR(50) NOT NULL,
+valor int NOT NULL
+);
+
