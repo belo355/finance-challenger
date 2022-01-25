@@ -1,4 +1,4 @@
-package com.challenger.finance.receita;
+package com.challenger.finance.despesa;
 
 import lombok.Data;
 
@@ -11,25 +11,25 @@ import java.time.LocalDate;
 
 @Data
 @Entity
-public class Receita {
+public class Despesa {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long receitaId;
+    private Long despesaId;
 
-    private LocalDate dataReceita;
+    private LocalDate dataDespesa;
     private String descricao;
     private BigDecimal valor;
 
-    public Receita(){}
+    public Despesa(){}
 
     @Override
     public String toString() {
-        return "Receita{" +
-                "dataReceita=" + dataReceita +
+        return "Despesa{" +
+                "despesaId=" + despesaId +
+                ", dataDespesa=" + dataDespesa +
                 ", descricao='" + descricao + '\'' +
                 ", valor=" + valor +
                 '}';
     }
-
 }

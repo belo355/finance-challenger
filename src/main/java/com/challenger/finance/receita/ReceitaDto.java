@@ -1,20 +1,20 @@
 package com.challenger.finance.receita;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 
 public class ReceitaDto {
-    private LocalDate dataReceita;
+
+    private Long id;
     private String descricao;
     private BigDecimal valor;
 
 
-    public LocalDate getDataReceita() {
-        return dataReceita;
+    public Long getId() {
+        return id;
     }
 
-    public void setDataReceita(LocalDate dataReceita) {
-        this.dataReceita = dataReceita;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getDescricao() {
