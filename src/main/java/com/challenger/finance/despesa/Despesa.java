@@ -22,6 +22,11 @@ public class Despesa {
     private BigDecimal valor;
 
     public Despesa(){}
+    public Despesa(LocalDate dataDespesa, String descricao, BigDecimal valor){
+        this.dataDespesa = dataDespesa;
+        this.descricao = descricao;
+        this.valor = valor;
+    }
 
     @Override
     public String toString() {
