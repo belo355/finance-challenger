@@ -1,5 +1,6 @@
 package com.challenger.finance.receita;
 
+import com.challenger.finance.web.form.ReceitaForm;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -22,6 +23,12 @@ public class Receita {
     private BigDecimal valor;
 
     public Receita(){}
+
+    public Receita(ReceitaForm receitaForm) {
+        this.dataReceita = receitaForm.getDataReceita();
+        this.descricao = receitaForm.getDescricao();
+        this.valor = receitaForm.getValor();
+    }
 
     @Override
     public String toString() {

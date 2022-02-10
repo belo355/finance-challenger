@@ -8,7 +8,7 @@ import java.util.List;
 @Service
 public class ReceitaService {
 
-    private ReceitaRepository receitaRepositoty;
+    private final ReceitaRepository receitaRepositoty;
 
     @Autowired
     public ReceitaService(ReceitaRepository repository){
@@ -17,5 +17,9 @@ public class ReceitaService {
 
     public List<Receita> getReceitas(){
          return (List<Receita>) receitaRepositoty.findAll();
+    }
+
+    public void save(Receita receita){
+      receitaRepositoty.save(receita);
     }
 }
