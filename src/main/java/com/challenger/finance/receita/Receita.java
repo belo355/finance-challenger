@@ -30,6 +30,12 @@ public class Receita {
         this.valor = receitaForm.getValor();
     }
 
+    public Receita(LocalDate date, String descricao, BigDecimal valor) {
+        this.dataReceita = date;
+        this.descricao = descricao;
+        this.valor = valor;
+    }
+
     @Override
     public String toString() {
         return "Receita{" +

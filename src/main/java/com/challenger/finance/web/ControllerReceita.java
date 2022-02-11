@@ -1,6 +1,5 @@
 package com.challenger.finance.web;
 
-import com.challenger.finance.despesa.Despesa;
 import com.challenger.finance.receita.Receita;
 import com.challenger.finance.receita.ReceitaService;
 import com.challenger.finance.web.dto.ReceitaDto;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.transaction.Transactional;
-import java.util.List;
+import java.util.List;                                                                 
 
 @RestController
 public class ControllerReceita {
