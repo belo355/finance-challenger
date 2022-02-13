@@ -1,6 +1,7 @@
 package com.challenger.finance.web.dto;
 
 import com.challenger.finance.receita.Receita;
+import com.challenger.finance.web.form.ReceitaForm;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -11,6 +12,12 @@ public class ReceitaDto {
     private String descricao;
     private BigDecimal valor;
 
+
+    public ReceitaDto(ReceitaForm receitaForm){
+        this.dataReceita = receitaForm.getDataReceita();
+        this.descricao = receitaForm.getDescricao();
+        this.valor = receitaForm.getValor();
+    }
     public ReceitaDto(Receita receitaForm){
         this.dataReceita = receitaForm.getDataReceita();
         this.descricao = receitaForm.getDescricao();

@@ -11,8 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import javax.xml.ws.Response;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -36,5 +34,11 @@ public class ControllerReceita {
     @GetMapping("/receita/{id}")
     public ResponseEntity<ReceitaDto> findbyId(@PathVariable Long id){
         return receitaService.getReceitaById(id);
+    }
+
+    @PutMapping("receita/{id}")
+    @Transactional
+    public ResponseEntity<ReceitaDto> update(@PathVariable Long id, @RequestBody ReceitaForm receitaForm) {
+        return receitaService.update(id, receitaForm);
     }
 }

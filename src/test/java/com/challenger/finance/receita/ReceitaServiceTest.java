@@ -2,21 +2,12 @@ package com.challenger.finance.receita;
 
 import com.challenger.finance.web.dto.ReceitaDto;
 import com.challenger.finance.web.form.ReceitaForm;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.http.*;
-import org.springframework.mock.web.MockHttpServletRequest;
-import org.springframework.util.concurrent.ListenableFuture;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
-import javax.xml.ws.Response;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -24,9 +15,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -40,14 +29,15 @@ class ReceitaServiceTest {
     private Receita receita;
 
     @Mock
-    private RestTemplate template;
+    private ReceitaForm receitaForm;
+
 
     @BeforeEach()
     void init() {
         this.service = mock(ReceitaService.class);
         LocalDate date = LocalDate.of(2020, 1, 8);
         this.receita = new Receita(1L, date, "Salario", new BigDecimal(1000));
-        this.template = mock(RestTemplate.class);
+        this.receitaForm = new ReceitaForm(date, "13 salario", new BigDecimal("1500"));
     }
 
     @Test
@@ -71,9 +61,26 @@ class ReceitaServiceTest {
 
     @Test
     void test_save_new_receita_success() {
-        when(service.save(any(Receita.class))).thenReturn((ResponseEntity<ReceitaDto>) ResponseEntity.created(URI.create("localhost:8080/receita/1")).body(new ReceitaDto(receita)));
+        when(service.save(any(Receita.class)))
+                .thenReturn((ResponseEntity<ReceitaDto>) ResponseEntity.created(URI.create("localhost:8080/receita/1"))
+                        .body(new ReceitaDto(receita)));
         ResponseEntity<ReceitaDto> responseEntity = service.save(receita);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.CREATED);
         Assertions.assertEquals(Objects.requireNonNull(responseEntity.getBody()).getDescricao(), "Salario");
+    }
+
+    @Test
+    void test_update_receita_exist(){
+        when(service.save(any(Receita.class)))
+                .thenReturn((ResponseEntity<ReceitaDto>) ResponseEntity.created(URI.create("localhost:8080/receita/1"))
+                        .body(new ReceitaDto(receita)));
+
+        when(service.update(1L, receitaForm))
+                .thenReturn(ResponseEntity.ok().body(new ReceitaDto(receitaForm)));
+
+        service.save(receita);
+        ResponseEntity<ReceitaDto> receitaDtoResponseEntity = service.update(1L, receitaForm);
+        Assertions.assertEquals(receitaDtoResponseEntity.getStatusCode(), HttpStatus.OK);
+        Assertions.assertEquals(Objects.requireNonNull(receitaDtoResponseEntity.getBody()).getDescricao(), "13 salario");
     }
 }

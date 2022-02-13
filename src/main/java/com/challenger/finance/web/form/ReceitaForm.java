@@ -8,6 +8,12 @@ public class ReceitaForm {
     private String descricao;
     private BigDecimal valor;
 
+    public ReceitaForm(LocalDate date, String descricao, BigDecimal valor) {
+        this.dataReceita = date;
+        this.descricao = descricao;
+        this.valor = valor;
+    }
+
     public LocalDate getDataReceita() {
         return dataReceita;
     }
