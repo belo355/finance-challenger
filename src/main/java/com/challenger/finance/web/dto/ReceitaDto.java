@@ -4,6 +4,7 @@ import com.challenger.finance.receita.Receita;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 public class ReceitaDto {
     private LocalDate dataReceita;
@@ -14,6 +15,14 @@ public class ReceitaDto {
         this.dataReceita = receitaForm.getDataReceita();
         this.descricao = receitaForm.getDescricao();
         this.valor = receitaForm.getValor();
+    }
+
+    public ReceitaDto(List<Receita> receitas){
+        for (Receita receita : receitas) {
+            this.dataReceita = receita.getDataReceita();
+            this.descricao = receita.getDescricao();
+            this.valor = receita.getValor();
+        }
     }
 
     public ReceitaDto(LocalDate dataReceita, String descricao, BigDecimal valor) {

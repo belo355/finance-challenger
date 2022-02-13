@@ -52,10 +52,12 @@ class ReceitaServiceTest {
 
     @Test
     void test_get_all_receitas(){
-       List<Receita> receitas = new ArrayList<>() ;
-       receitas.add(receita);
-       when(service.getReceitas()).thenReturn(receitas);
-       Assertions.assertEquals("Salario", receitas.get(0).getDescricao());
+       List<ReceitaDto> receitas = new ArrayList<>() ;
+       receitas.add(new ReceitaDto(receita));
+       when(service.getReceitas()).thenReturn(ResponseEntity.ok().body(receitas));
+       ResponseEntity<List<ReceitaDto>> receitas1 = service.getReceitas();
+       Assertions.assertEquals(receitas1.getStatusCode(), HttpStatus.OK);
+       Assertions.assertEquals("Salario", receitas1.getBody().get(0).getDescricao());
     }
 
     @Test

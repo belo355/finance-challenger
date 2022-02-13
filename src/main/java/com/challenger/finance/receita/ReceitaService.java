@@ -8,8 +8,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReceitaService {
@@ -23,8 +25,11 @@ public class ReceitaService {
         this.receitaRepository = repository;
     }
 
-    public List<Receita> getReceitas(){           //todo ajustar para response entity 
-         return (List<Receita>) receitaRepository.findAll();
+    public ResponseEntity<List<ReceitaDto>> getReceitas(){
+         Optional<List<Receita>> receitas = Optional.of((List<Receita>) receitaRepository.findAll());
+         List<ReceitaDto> receitaDtos = new ArrayList<>();
+         receitas.get().stream().map(receita -> receitaDtos.add(new ReceitaDto(receita))).collect(Collectors.toList());
+         return receitas.map(rc -> ResponseEntity.ok().body(receitaDtos)).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     public ResponseEntity<ReceitaDto> save(Receita receita){

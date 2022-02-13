@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
+import javax.xml.ws.Response;
 import java.net.URI;
 import java.util.List;
 
@@ -21,9 +22,8 @@ public class ControllerReceita {
     private ReceitaService receitaService;
 
     @GetMapping("/receita")
-    public ResponseEntity<List<Receita>> findAll(){
-        List<Receita> receitas = receitaService.getReceitas();
-        return ResponseEntity.ok().body(receitas);
+    public ResponseEntity<List<ReceitaDto>> findAll(){
+        return receitaService.getReceitas();
     }
 
     @PostMapping("/receita")
