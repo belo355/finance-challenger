@@ -16,6 +16,13 @@ public class ReceitaDto {
         this.valor = receitaForm.getValor();
     }
 
+    public ReceitaDto(LocalDate dataReceita, String descricao, BigDecimal valor) {
+        this.dataReceita = dataReceita;
+        this.descricao = descricao;
+        this.valor = valor;
+    }
+    public ReceitaDto() {}
+
     public LocalDate getDataReceita() {
         return dataReceita;
     }

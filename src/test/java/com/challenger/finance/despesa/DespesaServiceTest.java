@@ -2,13 +2,13 @@ package com.challenger.finance.despesa;
 
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
-import static org.mockito.Mockito.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.mockito.Mockito.*;
 
 class DespesaServiceTest {
 
@@ -17,8 +17,7 @@ class DespesaServiceTest {
 
     @Mock
     private Despesa despesa;
-
-
+    
     @BeforeEach
     void init() {
         this.service = mock(DespesaService.class);

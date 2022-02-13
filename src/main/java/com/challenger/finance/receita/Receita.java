@@ -30,7 +30,8 @@ public class Receita {
         this.valor = receitaForm.getValor();
     }
 
-    public Receita(LocalDate date, String descricao, BigDecimal valor) {
+    public Receita(Long receitaId, LocalDate date, String descricao, BigDecimal valor) {
+        this.receitaId = receitaId;
         this.dataReceita = date;
         this.descricao = descricao;
         this.valor = valor;

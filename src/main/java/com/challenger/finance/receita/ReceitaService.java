@@ -1,25 +1,42 @@
 package com.challenger.finance.receita;
 
+import com.challenger.finance.web.dto.ReceitaDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ReceitaService {
 
-    private final ReceitaRepository receitaRepositoty;
+    private static Logger logger = LoggerFactory.getLogger(ReceitaService.class);
+
+    private final ReceitaRepository receitaRepository;
 
     @Autowired
     public ReceitaService(ReceitaRepository repository){
-        this.receitaRepositoty = repository;
+        this.receitaRepository = repository;
     }
 
-    public List<Receita> getReceitas(){
-         return (List<Receita>) receitaRepositoty.findAll();
+    public List<Receita> getReceitas(){           //todo ajustar para response entity 
+         return (List<Receita>) receitaRepository.findAll();
     }
 
-    public void save(Receita receita){
-      receitaRepositoty.save(receita);
+    public ResponseEntity<ReceitaDto> save(Receita receita){
+      receitaRepository.save(receita);
+      //todo alterar por descricao e data
+      Optional<Receita> receitaCreated =  receitaRepository.findBydescricao(receita.getDescricao());
+      return receitaCreated.map(rc -> ResponseEntity.created(URI.create("localhost:8080/receita/" + rc.getReceitaId()))
+              .body(new ReceitaDto(rc))).orElseGet(() -> ResponseEntity.badRequest().build());
+    }
+
+    public ResponseEntity<ReceitaDto> getReceitaById(Long id) {
+        Optional<Receita> receita = receitaRepository.findById(id);
+        return receita.map(rc -> ResponseEntity.ok(new ReceitaDto(rc))).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

@@ -8,13 +8,11 @@ import com.challenger.finance.web.form.ReceitaForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.transaction.Transactional;
-import java.util.List;                                                                 
+import java.net.URI;
+import java.util.List;
 
 @RestController
 public class ControllerReceita {
@@ -22,17 +20,21 @@ public class ControllerReceita {
     @Autowired
     private ReceitaService receitaService;
 
-    @GetMapping("/receitas")
+    @GetMapping("/receita")
     public ResponseEntity<List<Receita>> findAll(){
         List<Receita> receitas = receitaService.getReceitas();
         return ResponseEntity.ok().body(receitas);
     }
 
-    @PostMapping("/receitas")
+    @PostMapping("/receita")
     @Transactional
     public ResponseEntity<ReceitaDto> create(@RequestBody ReceitaForm receitaForm) {
         Receita receita = new Receita(receitaForm);
-        receitaService.save(receita);
-        return ResponseEntity.ok().body(new ReceitaDto(receita));
+        return receitaService.save(receita);
+    }
+
+    @GetMapping("/receita/{id}")
+    public ResponseEntity<ReceitaDto> findbyId(@PathVariable Long id){
+        return receitaService.getReceitaById(id);
     }
 }
