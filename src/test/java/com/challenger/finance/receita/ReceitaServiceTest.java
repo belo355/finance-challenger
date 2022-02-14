@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.*;
 
+import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -82,5 +83,21 @@ class ReceitaServiceTest {
         ResponseEntity<ReceitaDto> receitaDtoResponseEntity = service.update(1L, receitaForm);
         Assertions.assertEquals(receitaDtoResponseEntity.getStatusCode(), HttpStatus.OK);
         Assertions.assertEquals(Objects.requireNonNull(receitaDtoResponseEntity.getBody()).getDescricao(), "13 salario");
+    }
+
+    @Test
+    void test_delete_receita_exists(){
+        when(service.delete(any(Long.class))).thenReturn(ResponseEntity.status(200).body("receita deleted"));
+        ResponseEntity responseEntity = service.delete(receita.getReceitaId());
+        Assertions.assertEquals(responseEntity.getStatusCode(),HttpStatus.OK);
+        Assertions.assertEquals(responseEntity.getBody(), "receita deleted");
+    }
+
+    @Test
+    void test_not_delete_receita_exists_is_false(){   //todo
+        when(service.delete(2L)).thenReturn(ResponseEntity.status(200).body("receita deleted"));
+        ResponseEntity responseEntity = service.delete(receita.getReceitaId());
+        Assertions.assertEquals(responseEntity.getStatusCode(), 404);
+        Assertions.assertNotEquals(responseEntity.getBody(), "receita deleted");
     }
 }

@@ -41,4 +41,10 @@ public class ControllerReceita {
     public ResponseEntity<ReceitaDto> update(@PathVariable Long id, @RequestBody ReceitaForm receitaForm) {
         return receitaService.update(id, receitaForm);
     }
+
+    @DeleteMapping("/receita/{id}")
+    @Transactional
+    public ResponseEntity delete(@PathVariable Long id){
+        return receitaService.delete(id);
+    }
 }

@@ -1,5 +1,6 @@
 package com.challenger.finance.receita;
 
+import ch.qos.logback.core.encoder.EchoEncoder;
 import com.challenger.finance.web.dto.ReceitaDto;
 import com.challenger.finance.web.form.ReceitaForm;
 import org.slf4j.Logger;
@@ -80,4 +81,14 @@ public class ReceitaService {
         }
     }
 
+    public ResponseEntity delete(Long id) {
+        try{
+            Optional<Receita> receita = receitaRepository.findById(id);
+            receita.ifPresent(receitaRepository::delete);
+            return ResponseEntity.status(200).body("receita deleted");
+        }catch (Exception e) {
+            logger.info("receita not found {}", e.getMessage());
+            return ResponseEntity.status(404).build();
+        }
+    }
 }
