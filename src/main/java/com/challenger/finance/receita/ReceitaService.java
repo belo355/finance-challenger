@@ -18,16 +18,16 @@ import java.util.stream.Collectors;
 public class ReceitaService {
 
     private static Logger logger = LoggerFactory.getLogger(ReceitaService.class);
-    private final ReceitaRepository receitaRepository;
+    private final ReceitaRepository repository;
 
     @Autowired
     public ReceitaService(ReceitaRepository repository){
-        this.receitaRepository = repository;
+        this.repository = repository;
     }
 
-    public ResponseEntity<List<ReceitaDto>> getReceitas() {
+    public ResponseEntity<List<ReceitaDto>> getAll() {
         try {
-            Optional<List<Receita>> receitas = Optional.of((List<Receita>) receitaRepository.findAll());
+            Optional<List<Receita>> receitas = Optional.of((List<Receita>) repository.findAll());
             if(!receitas.get().isEmpty()){
                 List<ReceitaDto> receitaDtos = new ArrayList<>();
                 receitas.get().stream().map(receita -> receitaDtos.add(new ReceitaDto(receita))).collect(Collectors.toList());
@@ -44,8 +44,8 @@ public class ReceitaService {
 
     public ResponseEntity<ReceitaDto> save(Receita receita) {
         try {
-            receitaRepository.save(receita);
-            Optional<Receita> receitaCreated = receitaRepository.findBydescricao(receita.getDescricao());       //todo alterar por descricao e data
+            repository.save(receita);
+            Optional<Receita> receitaCreated = repository.findBydescricao(receita.getDescricao());       //todo alterar por descricao e data
             return receitaCreated.map(rc -> ResponseEntity.created(URI.create("localhost:8080/receita/" + rc.getReceitaId()))
                     .body(new ReceitaDto(rc))).orElseGet(() -> ResponseEntity.badRequest().build());
         } catch (Exception e) {
@@ -54,10 +54,15 @@ public class ReceitaService {
         }
     }
 
-    public ResponseEntity<ReceitaDto> getReceitaById(Long id) {
+    public ResponseEntity<ReceitaDto> getById(Long id) {
         try {
-            Optional<Receita> receita = receitaRepository.findById(id);
-            return receita.map(rc -> ResponseEntity.ok(new ReceitaDto(rc))).orElseGet(() -> ResponseEntity.notFound().build());
+            Optional<Receita> receita = repository.findById(id);
+            if(receita.isPresent()){
+                return receita.map(rc -> ResponseEntity.ok(new ReceitaDto(rc))).orElseGet(() -> ResponseEntity.notFound().build());
+            }else{
+                logger.info("Receita not found");
+                return ResponseEntity.notFound().build(); 
+            }
         } catch (Exception e) {
             logger.error("Receita not found {}", e.getMessage());
             return ResponseEntity.notFound().build();
@@ -67,14 +72,12 @@ public class ReceitaService {
     public ResponseEntity<ReceitaDto> update(Long id, ReceitaForm receitaForm) {
         try{
             Receita receitaUpdate = new Receita(receitaForm);
-            Optional<Receita> receita = receitaRepository.findById(id);
+            Optional<Receita> receita = repository.findById(id);
 
             if(receita.isPresent()) {
-                receita.get().setDataReceita(receitaUpdate.getDataReceita());
-                receita.get().setDescricao(receitaUpdate.getDescricao());
-                receita.get().setValor(receitaUpdate.getValor());
+                updatedReceita(receitaUpdate, receita);
             }
-            receitaRepository.save(receita.get());
+            repository.save(receita.get());
             return ResponseEntity.ok().body(new ReceitaDto(receita.get()));
         }catch (Exception e) {
             logger.error("Receita not found {}", e.getMessage());
@@ -82,11 +85,17 @@ public class ReceitaService {
         }
     }
 
+    private void updatedReceita(Receita receitaUpdate, Optional<Receita> receita) {
+        receita.get().setDataReceita(receitaUpdate.getDataReceita());
+        receita.get().setDescricao(receitaUpdate.getDescricao());
+        receita.get().setValor(receitaUpdate.getValor());
+    }
+
     public ResponseEntity delete(Long id) {
         try{
-            Optional<Receita> receita = receitaRepository.findById(id);
+            Optional<Receita> receita = repository.findById(id);
             if(receita.isPresent()){
-                receitaRepository.delete(receita.get());
+                repository.delete(receita.get());
                 return ResponseEntity.status(200).body("receita deleted");
             }else {
                 logger.info("receita not found");

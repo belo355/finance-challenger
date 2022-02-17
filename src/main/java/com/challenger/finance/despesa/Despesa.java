@@ -1,5 +1,6 @@
 package com.challenger.finance.despesa;
 
+import com.challenger.finance.web.form.DespesaForm;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -26,6 +27,12 @@ public class Despesa {
         this.dataDespesa = dataDespesa;
         this.descricao = descricao;
         this.valor = valor;
+    }
+
+    public Despesa(DespesaForm despesaForm) {
+        this.dataDespesa = despesaForm.getDataReceita();
+        this.descricao = despesaForm.getDescricao();
+        this.valor = despesaForm.getValor();
     }
 
     @Override

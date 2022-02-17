@@ -13,7 +13,6 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -45,24 +44,24 @@ class ReceitaServiceTest {
     void test_get_all_receitas(){
        List<ReceitaDto> receitas = new ArrayList<>() ;
        receitas.add(new ReceitaDto(receita));
-       when(service.getReceitas()).thenReturn(ResponseEntity.ok().body(receitas));
-       ResponseEntity<List<ReceitaDto>> receitas1 = service.getReceitas();
+       when(service.getAll()).thenReturn(ResponseEntity.ok().body(receitas));
+       ResponseEntity<List<ReceitaDto>> receitas1 = service.getAll();
        Assertions.assertEquals(receitas1.getStatusCode(), HttpStatus.OK);
        Assertions.assertEquals("Salario", receitas1.getBody().get(0).getDescricao());
     }
 
     @Test
     void test_not_get_all_receitas_is_empty(){
-        when(service.getReceitas()).thenReturn(ResponseEntity.notFound().build());
-        ResponseEntity<List<ReceitaDto>> receitas1 = service.getReceitas();
+        when(service.getAll()).thenReturn(ResponseEntity.notFound().build());
+        ResponseEntity<List<ReceitaDto>> receitas1 = service.getAll();
         Assertions.assertEquals(receitas1.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
     @Test
     void test_get_find_by_id_receitas() throws URISyntaxException {
         ReceitaDto receitaDto = new ReceitaDto(receita);
-        when(service.getReceitaById(any(Long.class))).thenReturn(ResponseEntity.ok().body(receitaDto));
-        ResponseEntity<ReceitaDto> responseEntity = service.getReceitaById(1L);
+        when(service.getById(any(Long.class))).thenReturn(ResponseEntity.ok().body(receitaDto));
+        ResponseEntity<ReceitaDto> responseEntity = service.getById(1L);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         Assertions.assertEquals(Objects.requireNonNull(responseEntity.getBody()).getDescricao(), "Salario");
     }

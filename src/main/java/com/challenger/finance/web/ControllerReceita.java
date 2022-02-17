@@ -17,34 +17,34 @@ import java.util.List;
 public class ControllerReceita {
 
     @Autowired
-    private ReceitaService receitaService;
+    private ReceitaService service;
 
     @GetMapping("/receita")
     public ResponseEntity<List<ReceitaDto>> findAll(){
-        return receitaService.getReceitas();
+        return service.getAll();
     }
 
     @PostMapping("/receita")
     @Transactional
     public ResponseEntity<ReceitaDto> create(@RequestBody ReceitaForm receitaForm) {
         Receita receita = new Receita(receitaForm);
-        return receitaService.save(receita);
+        return service.save(receita);
     }
 
     @GetMapping("/receita/{id}")
     public ResponseEntity<ReceitaDto> findbyId(@PathVariable Long id){
-        return receitaService.getReceitaById(id);
+        return service.getById(id);
     }
 
     @PutMapping("receita/{id}")
     @Transactional
     public ResponseEntity<ReceitaDto> update(@PathVariable Long id, @RequestBody ReceitaForm receitaForm) {
-        return receitaService.update(id, receitaForm);
+        return service.update(id, receitaForm);
     }
 
     @DeleteMapping("/receita/{id}")
     @Transactional
     public ResponseEntity delete(@PathVariable Long id){
-        return receitaService.delete(id);
+        return service.delete(id);
     }
 }
