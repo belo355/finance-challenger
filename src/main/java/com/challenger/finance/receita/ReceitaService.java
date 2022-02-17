@@ -1,17 +1,13 @@
 package com.challenger.finance.receita;
 
-import ch.qos.logback.core.encoder.EchoEncoder;
 import com.challenger.finance.web.dto.ReceitaDto;
 import com.challenger.finance.web.form.ReceitaForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.config.RepositoryConfigurationExtension;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 
-import java.beans.ExceptionListener;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,9 +28,14 @@ public class ReceitaService {
     public ResponseEntity<List<ReceitaDto>> getReceitas() {
         try {
             Optional<List<Receita>> receitas = Optional.of((List<Receita>) receitaRepository.findAll());
-            List<ReceitaDto> receitaDtos = new ArrayList<>();
-            receitas.get().stream().map(receita -> receitaDtos.add(new ReceitaDto(receita))).collect(Collectors.toList());
-            return receitas.map(rc -> ResponseEntity.ok().body(receitaDtos)).orElseGet(() -> ResponseEntity.notFound().build());
+            if(!receitas.get().isEmpty()){
+                List<ReceitaDto> receitaDtos = new ArrayList<>();
+                receitas.get().stream().map(receita -> receitaDtos.add(new ReceitaDto(receita))).collect(Collectors.toList());
+                return receitas.map(rc -> ResponseEntity.ok().body(receitaDtos)).orElseGet(() -> ResponseEntity.notFound().build());
+            }else{
+                logger.info("receitas not found");
+                return ResponseEntity.notFound().build();
+            }
         } catch (Exception e) {
             logger.error("Receitas not found {}", e.getMessage());
             return ResponseEntity.notFound().build();
@@ -84,10 +85,14 @@ public class ReceitaService {
     public ResponseEntity delete(Long id) {
         try{
             Optional<Receita> receita = receitaRepository.findById(id);
-            receita.ifPresent(receitaRepository::delete);
-            return ResponseEntity.status(200).body("receita deleted");
+            if(receita.isPresent()){
+                receitaRepository.delete(receita.get());
+                return ResponseEntity.status(200).body("receita deleted");
+            }else {
+                logger.info("receita not found");
+                return ResponseEntity.notFound().build();
+            }
         }catch (Exception e) {
-            logger.info("receita not found {}", e.getMessage());
             return ResponseEntity.status(404).build();
         }
     }

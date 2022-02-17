@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.springframework.http.*;
 
-import javax.transaction.Transactional;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -49,6 +49,13 @@ class ReceitaServiceTest {
        ResponseEntity<List<ReceitaDto>> receitas1 = service.getReceitas();
        Assertions.assertEquals(receitas1.getStatusCode(), HttpStatus.OK);
        Assertions.assertEquals("Salario", receitas1.getBody().get(0).getDescricao());
+    }
+
+    @Test
+    void test_not_get_all_receitas_is_empty(){
+        when(service.getReceitas()).thenReturn(ResponseEntity.notFound().build());
+        ResponseEntity<List<ReceitaDto>> receitas1 = service.getReceitas();
+        Assertions.assertEquals(receitas1.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
     @Test
