@@ -1,6 +1,8 @@
 package com.challenger.finance.despesa;
 
 import com.challenger.finance.web.dto.DespesaDTO;
+import com.challenger.finance.web.dto.ReceitaDto;
+import com.challenger.finance.web.form.DespesaForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +63,44 @@ public class DespesaService {
             logger.error("Despesa not found {}", e.getMessage());
             return ResponseEntity.badRequest().build();
         }
-
     }
+
+    public ResponseEntity delete(Long id) {
+        try{
+            Optional<Despesa> despesa = repository.findById(id);
+            if(despesa.isPresent()){
+                repository.delete(despesa.get());
+                return ResponseEntity.status(200).body("despesa deleted");
+            }else {
+                logger.info("receita not found");
+                return ResponseEntity.notFound().build();
+            }
+        }catch (Exception e) {
+            return ResponseEntity.status(404).build();
+        }
+    }
+
+    public ResponseEntity<DespesaDTO> update(Long id, DespesaForm despesaForm){
+          try{
+               Optional<Despesa> despesa = repository.findById(id);
+               if(despesa.isPresent()){
+                   udpateDespesa(despesa, despesaForm);
+                   repository.save(despesa.get());
+                   return ResponseEntity.ok().body(new DespesaDTO(despesa.get()));
+               }else{
+                   logger.info("despesa not found");
+                   return ResponseEntity.notFound().build();
+               }
+          }catch (Exception e){
+              logger.error("despesa not found");
+              return ResponseEntity.notFound().build();
+          }
+    }
+
+    private void udpateDespesa(Optional<Despesa> despesa, DespesaForm despesaForm) {
+        despesa.get().setDescricao(despesaForm.getDescricao());
+        despesa.get().setValor(despesaForm.getValor());
+        despesa.get().setDataDespesa(despesaForm.getDataReceita());
+    }
+
 }

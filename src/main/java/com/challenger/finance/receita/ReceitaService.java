@@ -71,24 +71,25 @@ public class ReceitaService {
 
     public ResponseEntity<ReceitaDto> update(Long id, ReceitaForm receitaForm) {
         try{
-            Receita receitaUpdate = new Receita(receitaForm);
             Optional<Receita> receita = repository.findById(id);
-
             if(receita.isPresent()) {
-                updatedReceita(receitaUpdate, receita);
+                updatedReceita(receita, receitaForm);
+                repository.save(receita.get());
+                return ResponseEntity.ok().body(new ReceitaDto(receita.get()));
+            }else{
+                logger.info("receita not found");
+                return ResponseEntity.notFound().build();
             }
-            repository.save(receita.get());
-            return ResponseEntity.ok().body(new ReceitaDto(receita.get()));
         }catch (Exception e) {
             logger.error("Receita not found {}", e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
 
-    private void updatedReceita(Receita receitaUpdate, Optional<Receita> receita) {
-        receita.get().setDataReceita(receitaUpdate.getDataReceita());
-        receita.get().setDescricao(receitaUpdate.getDescricao());
-        receita.get().setValor(receitaUpdate.getValor());
+    private void updatedReceita(Optional<Receita> receitaUpdate, ReceitaForm receitaForm) {
+        receitaUpdate.get().setDataReceita(receitaForm.getDataReceita());
+        receitaUpdate.get().setDescricao(receitaForm.getDescricao());
+        receitaUpdate.get().setValor(receitaForm.getValor());
     }
 
     public ResponseEntity delete(Long id) {

@@ -34,4 +34,16 @@ public class ControllerDespesa {
         return service.getById(id);
     }
 
+    @DeleteMapping("/despesa/{id}")
+    @Transactional
+    public ResponseEntity delete(@PathVariable Long id){
+        return service.delete(id);
+    }
+
+    @PutMapping("/despesa/{id}")
+    @Transactional
+    public ResponseEntity<DespesaDTO> delete(@PathVariable Long id, @RequestBody DespesaForm despesaForm){
+        return service.update(id, despesaForm);
+    }
+
 }
