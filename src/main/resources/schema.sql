@@ -11,5 +11,6 @@ CREATE TABLE DESPESA (
 despesa_id int PRIMARY KEY,
 data_despesa VARCHAR(50) NOT NULL,
 descricao VARCHAR(50) NOT NULL,
+categoria VARCHAR(50) NOT NULL,
 valor int NOT NULL
 );

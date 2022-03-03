@@ -6,11 +6,13 @@ import java.time.LocalDate;
 public class DespesaForm {
     private LocalDate dataReceita;
     private String descricao;
+    private DespesaCategoriaEnum categoriaEnum;
     private BigDecimal valor;
 
-    public DespesaForm(LocalDate date, String descricao, BigDecimal valor) {
+    public DespesaForm(LocalDate date, String descricao, DespesaCategoriaEnum categoriaEnum, BigDecimal valor) {
         this.dataReceita = date;
         this.descricao = descricao;
+        this.categoriaEnum = categoriaEnum;
         this.valor = valor;
     }
 
@@ -37,4 +39,13 @@ public class DespesaForm {
     public void setValor(BigDecimal valor) {
         this.valor = valor;
     }
+
+    public DespesaCategoriaEnum getCategoriaEnum() {
+        return categoriaEnum;
+    }
+
+    public void setCategoriaEnum(DespesaCategoriaEnum categoriaEnum) {
+        this.categoriaEnum = categoriaEnum;
+    }
 }
+

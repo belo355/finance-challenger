@@ -1,5 +1,6 @@
 package com.challenger.finance.despesa;
 
+import com.challenger.finance.web.form.DespesaCategoriaEnum;
 import com.challenger.finance.web.form.DespesaForm;
 import lombok.Data;
 
@@ -20,12 +21,14 @@ public class Despesa {
 
     private LocalDate dataDespesa;
     private String descricao;
+    private DespesaCategoriaEnum categoriaEnum; 
     private BigDecimal valor;
 
     public Despesa(){}
-    public Despesa(LocalDate dataDespesa, String descricao, BigDecimal valor){
+    public Despesa(LocalDate dataDespesa, String descricao, DespesaCategoriaEnum categoriaEnum, BigDecimal valor){
         this.dataDespesa = dataDespesa;
         this.descricao = descricao;
+        this.categoriaEnum = categoriaEnum;
         this.valor = valor;
     }
 

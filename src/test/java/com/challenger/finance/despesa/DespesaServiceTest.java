@@ -1,6 +1,7 @@
 package com.challenger.finance.despesa;
 
 import com.challenger.finance.web.dto.DespesaDTO;
+import com.challenger.finance.web.form.DespesaCategoriaEnum;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ class DespesaServiceTest {
     void init() {
         this.service = mock(DespesaService.class);
         LocalDate date = LocalDate.of(2020, 1, 8);
-        this.despesa = new Despesa(date, "Condominio", new BigDecimal(500));
+        this.despesa = new Despesa(date, "Condominio", DespesaCategoriaEnum.ALIMENTACAO, new BigDecimal(500));
     }
 
     @Test
