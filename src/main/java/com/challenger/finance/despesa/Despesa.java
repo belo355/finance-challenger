@@ -3,6 +3,7 @@ package com.challenger.finance.despesa;
 import com.challenger.finance.web.form.DespesaCategoriaEnum;
 import com.challenger.finance.web.form.DespesaForm;
 import lombok.Data;
+import lombok.Getter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,6 +33,13 @@ public class Despesa {
         this.valor = valor;
     }
 
+    public Despesa(Long despesaId, LocalDate dataDespesa, String descricao, DespesaCategoriaEnum categoriaEnum, BigDecimal valor){
+        this.despesaId = despesaId;
+        this.dataDespesa = dataDespesa;
+        this.descricao = descricao;
+        this.categoriaEnum = categoriaEnum;
+        this.valor = valor;
+    }
     public Despesa(DespesaForm despesaForm) {
         this.dataDespesa = despesaForm.getDataReceita();
         this.descricao = despesaForm.getDescricao();

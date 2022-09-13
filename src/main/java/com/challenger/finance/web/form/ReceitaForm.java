@@ -18,23 +18,13 @@ public class ReceitaForm {
         return dataReceita;
     }
 
-    public void setDataReceita(LocalDate dataReceita) {
-        this.dataReceita = dataReceita;
-    }
-
     public String getDescricao() {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
 
     public BigDecimal getValor() {
         return valor;
     }
 
-    public void setValor(BigDecimal valor) {
-        this.valor = valor;
-    }
 }

@@ -101,9 +101,9 @@ class ReceitaServiceTest {
 
     @Test
     void test_not_delete_receita_exists_is_false(){
-        when(service.delete(2L)).thenReturn(ResponseEntity.status(200).body("receita deleted"));
-        ResponseEntity responseEntity = service.delete(receita.getReceitaId());
-        Assertions.assertEquals(responseEntity.getStatusCode(), 404);
+        when(service.delete(2L)).thenReturn(ResponseEntity.status(404).body("receita not found"));
+        ResponseEntity responseEntity = service.delete(2L);
+        Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
         Assertions.assertNotEquals(responseEntity.getBody(), "receita deleted");
     }
 }

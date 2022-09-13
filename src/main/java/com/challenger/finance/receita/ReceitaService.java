@@ -17,8 +17,11 @@ import java.util.stream.Collectors;
 @Service
 public class ReceitaService {
 
-    private static Logger logger = LoggerFactory.getLogger(ReceitaService.class);
+    private static final Logger logger = LoggerFactory.getLogger(ReceitaService.class);
     private final ReceitaRepository repository;
+
+    private final String RECEITA_NOT_FOUND = "receitas not found {}";
+    private final String RECEITA_NOT_FOUND_EXCEPTION = "receitas not found {} {}";
 
     @Autowired
     public ReceitaService(ReceitaRepository repository){
@@ -28,16 +31,16 @@ public class ReceitaService {
     public ResponseEntity<List<ReceitaDto>> getAll() {
         try {
             Optional<List<Receita>> receitas = Optional.of((List<Receita>) repository.findAll());
-            if(!receitas.get().isEmpty()){
+            if (!receitas.get().isEmpty()) {
                 List<ReceitaDto> receitaDtos = new ArrayList<>();
                 receitas.get().stream().map(receita -> receitaDtos.add(new ReceitaDto(receita))).collect(Collectors.toList());
                 return receitas.map(rc -> ResponseEntity.ok().body(receitaDtos)).orElseGet(() -> ResponseEntity.notFound().build());
-            }else{
-                logger.info("receitas not found");
+            } else {
+                logger.info("Receitas not found");
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            logger.error("Receitas not found {}", e.getMessage());
+            logger.error(RECEITA_NOT_FOUND_EXCEPTION, e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
@@ -45,11 +48,11 @@ public class ReceitaService {
     public ResponseEntity<ReceitaDto> save(Receita receita) {
         try {
             repository.save(receita);
-            Optional<Receita> receitaCreated = repository.findBydescricao(receita.getDescricao());       //todo alterar por descricao e data
+            Optional<Receita> receitaCreated = repository.findBydescricao(receita.getDescricao());
             return receitaCreated.map(rc -> ResponseEntity.created(URI.create("localhost:8080/receita/" + rc.getReceitaId()))
                     .body(new ReceitaDto(rc))).orElseGet(() -> ResponseEntity.badRequest().build());
         } catch (Exception e) {
-            logger.error("Receitas not found {}", e.getMessage());
+            logger.error(RECEITA_NOT_FOUND_EXCEPTION, receita.getReceitaId(), e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
@@ -57,52 +60,54 @@ public class ReceitaService {
     public ResponseEntity<ReceitaDto> getById(Long id) {
         try {
             Optional<Receita> receita = repository.findById(id);
-            if(receita.isPresent()){
+            if (receita.isPresent()) {
                 return receita.map(rc -> ResponseEntity.ok(new ReceitaDto(rc))).orElseGet(() -> ResponseEntity.notFound().build());
-            }else{
-                logger.info("Receita not found");
-                return ResponseEntity.notFound().build(); 
+            } else {
+                logger.info(RECEITA_NOT_FOUND, id);
+                return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            logger.error("Receita not found {}", e.getMessage());
+            logger.error(RECEITA_NOT_FOUND_EXCEPTION, id, e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
 
     public ResponseEntity<ReceitaDto> update(Long id, ReceitaForm receitaForm) {
-        try{
+        try {
             Optional<Receita> receita = repository.findById(id);
-            if(receita.isPresent()) {
+            if (receita.isPresent()) {
                 updatedReceita(receita, receitaForm);
                 repository.save(receita.get());
                 return ResponseEntity.ok().body(new ReceitaDto(receita.get()));
-            }else{
-                logger.info("receita not found");
+            } else {
+                logger.info(RECEITA_NOT_FOUND, id);
                 return ResponseEntity.notFound().build();
             }
-        }catch (Exception e) {
-            logger.error("Receita not found {}", e.getMessage());
+        } catch (Exception e) {
+            logger.error(RECEITA_NOT_FOUND_EXCEPTION, id, e.getMessage());
             return ResponseEntity.notFound().build();
         }
     }
 
     private void updatedReceita(Optional<Receita> receitaUpdate, ReceitaForm receitaForm) {
-        receitaUpdate.get().setDataReceita(receitaForm.getDataReceita());
-        receitaUpdate.get().setDescricao(receitaForm.getDescricao());
-        receitaUpdate.get().setValor(receitaForm.getValor());
+        if (receitaUpdate.isPresent()) {
+            receitaUpdate.get().setDataReceita(receitaForm.getDataReceita());
+            receitaUpdate.get().setDescricao(receitaForm.getDescricao());
+            receitaUpdate.get().setValor(receitaForm.getValor());
+        }
     }
 
     public ResponseEntity delete(Long id) {
-        try{
+        try {
             Optional<Receita> receita = repository.findById(id);
-            if(receita.isPresent()){
+            if (receita.isPresent()) {
                 repository.delete(receita.get());
                 return ResponseEntity.status(200).body("receita deleted");
-            }else {
-                logger.info("receita not found");
+            } else {
+                logger.info(RECEITA_NOT_FOUND, id);
                 return ResponseEntity.notFound().build();
             }
-        }catch (Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.status(404).build();
         }
     }
