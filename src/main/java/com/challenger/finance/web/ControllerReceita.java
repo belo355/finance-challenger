@@ -1,6 +1,5 @@
 package com.challenger.finance.web;
 
-import com.challenger.finance.receita.Receita;
 import com.challenger.finance.receita.ReceitaService;
 import com.challenger.finance.web.dto.ReceitaDto;
 import com.challenger.finance.web.form.ReceitaForm;
@@ -26,9 +25,8 @@ public class ControllerReceita {
 
     @PostMapping("/receita")
     @Transactional
-    public ResponseEntity<ReceitaDto> create(@RequestBody ReceitaForm receitaForm) {
-        Receita receita = new Receita(receitaForm);
-        return service.save(receita);
+    public ResponseEntity create(@RequestBody ReceitaForm receitaForm) {
+        return service.save(receitaForm);
     }
 
     @GetMapping("/receita/{id}")

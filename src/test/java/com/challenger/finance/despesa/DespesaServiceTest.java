@@ -29,7 +29,7 @@ class DespesaServiceTest {
     void init() {
         this.service = mock(DespesaService.class);
         LocalDate date = LocalDate.of(2020, 1, 8);
-        this.despesa = new Despesa(1L, date, "Condominio", DespesaCategoriaEnum.ALIMENTACAO, new BigDecimal(500));
+        this.despesa = new Despesa(date, "Condominio", DespesaCategoriaEnum.ALIMENTACAO, new BigDecimal(500));
     }
 
     @Test
@@ -54,16 +54,15 @@ class DespesaServiceTest {
     @Test
     void test_not_get_find_by_id_receitas_is_not_found() throws URISyntaxException {
         when(service.getById(any(Long.class))).thenReturn(ResponseEntity.notFound().build());
-        ResponseEntity<DespesaDTO> responseEntity = service.getById(99L);
+        ResponseEntity responseEntity = service.getById(99L);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
     @Test
-    void test_delete_receita_exists() {
-        when(service.delete(any(Long.class))).thenReturn(ResponseEntity.status(200).body("despesa deleted"));
-        ResponseEntity responseEntity = service.delete(despesa.getDespesaId());
+    void test_delete_ok_receita_exists() {
+        when(service.delete(any(Long.class))).thenReturn(ResponseEntity.status(HttpStatus.OK).body("despesa deleted"));
+        ResponseEntity responseEntity = service.delete(1L);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-        Assertions.assertEquals(responseEntity.getBody(), "despesa deleted");
     }
 
     @Test

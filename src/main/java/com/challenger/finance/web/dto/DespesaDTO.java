@@ -36,4 +36,19 @@ public class DespesaDTO {
         return categoriaEnum;
     }
 
+    public void setDataDespesa(LocalDate dataDespesa) {
+        this.dataDespesa = dataDespesa;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setCategoriaEnum(DespesaCategoriaEnum categoriaEnum) {
+        this.categoriaEnum = categoriaEnum;
+    }
+
+    public void setValor(BigDecimal valor) {
+        this.valor = valor;
+    }
 }

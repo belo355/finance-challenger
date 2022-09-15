@@ -5,6 +5,7 @@ import com.challenger.finance.web.form.DespesaForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -30,13 +31,13 @@ public class DespesaService {
 
     public ResponseEntity<List<DespesaDTO>> getAll() {
         Optional<List<Despesa>> despesas = Optional.of((List<Despesa>) repository.findAll());
-        if (!despesas.get().isEmpty()) {
+        if (despesas.get().isEmpty()) {
+            logger.info("despesas not found");
+            return ResponseEntity.notFound().build();
+        } else {
             List<DespesaDTO> despesaDTOS = new ArrayList<>();
             despesas.get().stream().map(despesa -> despesaDTOS.add(new DespesaDTO(despesa))).collect(Collectors.toList());
             return despesas.map(dp -> ResponseEntity.ok().body(despesaDTOS)).orElseGet(() -> ResponseEntity.notFound().build());
-        } else {
-            logger.info("despesas not found");
-            return ResponseEntity.notFound().build();
         }
     }
 
@@ -72,7 +73,7 @@ public class DespesaService {
             Optional<Despesa> despesa = repository.findById(id);
             if (despesa.isPresent()) {
                 repository.delete(despesa.get());
-                return ResponseEntity.status(200).body("despesa deleted");
+                return ResponseEntity.status(HttpStatus.OK).body("despesa deleted");
             } else {
                 logger.info(DESPESA_NOT_FOUND, id);
                 return ResponseEntity.notFound().build();

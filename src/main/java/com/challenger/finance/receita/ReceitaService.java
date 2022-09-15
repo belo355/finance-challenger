@@ -5,10 +5,10 @@ import com.challenger.finance.web.form.ReceitaForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -45,14 +45,11 @@ public class ReceitaService {
         }
     }
 
-    public ResponseEntity<ReceitaDto> save(Receita receita) {
+    public ResponseEntity save(ReceitaForm receita) {
         try {
-            repository.save(receita);
-            Optional<Receita> receitaCreated = repository.findBydescricao(receita.getDescricao());
-            return receitaCreated.map(rc -> ResponseEntity.created(URI.create("localhost:8080/receita/" + rc.getReceitaId()))
-                    .body(new ReceitaDto(rc))).orElseGet(() -> ResponseEntity.badRequest().build());
+            return new ResponseEntity(repository.save(new Receita(receita)), HttpStatus.CREATED);
         } catch (Exception e) {
-            logger.error(RECEITA_NOT_FOUND_EXCEPTION, receita.getReceitaId(), e.getMessage());
+            logger.error(RECEITA_NOT_FOUND_EXCEPTION, receita.getDescricao(), e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
