@@ -9,7 +9,6 @@ import org.mockito.Mock;
 import org.springframework.http.*;
 
 import java.math.BigDecimal;
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -70,7 +69,7 @@ class ReceitaServiceTest {
     @Test
     void test_save_new_receita_success() {
         when(service.save(any(ReceitaForm.class))).thenReturn(ResponseEntity.status(HttpStatus.CREATED).build());
-        ResponseEntity responseEntity = service.save(receitaForm);
+        ResponseEntity<HttpStatus> responseEntity = service.save(receitaForm);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.CREATED);
     }
 
@@ -85,17 +84,15 @@ class ReceitaServiceTest {
 
     @Test
     void test_delete_receita_exists() {
-        when(service.delete(any(Long.class))).thenReturn(ResponseEntity.status(200).body("receita deleted"));
-        ResponseEntity responseEntity = service.delete(1L);
+        when(service.delete(any(Long.class))).thenReturn(ResponseEntity.status(200).build());
+        ResponseEntity<HttpStatus> responseEntity = service.delete(1L);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
-        Assertions.assertEquals(responseEntity.getBody(), "receita deleted");
     }
 
     @Test
     void test_not_delete_receita_exists_is_false() {
-        when(service.delete(2L)).thenReturn(ResponseEntity.status(404).body("receita not found"));
-        ResponseEntity responseEntity = service.delete(2L);
+        when(service.delete(2L)).thenReturn(ResponseEntity.status(404).build());
+        ResponseEntity<HttpStatus> responseEntity = service.delete(2L);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
-        Assertions.assertNotEquals(responseEntity.getBody(), "receita deleted");
     }
 }

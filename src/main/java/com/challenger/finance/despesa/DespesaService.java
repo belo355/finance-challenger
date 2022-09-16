@@ -41,12 +41,9 @@ public class DespesaService {
         }
     }
 
-    public ResponseEntity<DespesaDTO> save(Despesa despesa) {
+    public ResponseEntity<HttpStatus> save(DespesaForm despesa) {
         try {
-            repository.save(despesa);
-            Optional<Despesa> despesaCreated = repository.findBydescricao(despesa.getDescricao());
-            return despesaCreated.map(dp -> ResponseEntity.created(URI.create("localhost:8080/despesa/" + dp.getDespesaId()))
-                    .body(new DespesaDTO(dp))).orElseGet(() -> ResponseEntity.badRequest().build());
+            return new ResponseEntity(repository.save(new Despesa(despesa)), HttpStatus.CREATED);  //TODO: mapStruct
         } catch (Exception e) {
             logger.error("Despesa not found {}", e.getMessage());
             return ResponseEntity.badRequest().build();
@@ -68,19 +65,19 @@ public class DespesaService {
         }
     }
 
-    public ResponseEntity delete(Long id) {
+    public ResponseEntity<HttpStatus> delete(Long id) {
         try {
             Optional<Despesa> despesa = repository.findById(id);
             if (despesa.isPresent()) {
                 repository.delete(despesa.get());
-                return ResponseEntity.status(HttpStatus.OK).body("despesa deleted");
+                return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 logger.info(DESPESA_NOT_FOUND, id);
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
             logger.error(DESPESA_NOT_FOUND_EXCEPTION, id, e.getMessage());
-            return ResponseEntity.status(404).build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 

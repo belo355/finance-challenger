@@ -1,7 +1,6 @@
 package com.challenger.finance.despesa;
 
 import com.challenger.finance.web.dto.DespesaDTO;
-import com.challenger.finance.web.dto.ReceitaDto;
 import com.challenger.finance.web.form.DespesaCategoriaEnum;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
@@ -9,7 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
-import java.net.URISyntaxException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,7 +41,7 @@ class DespesaServiceTest {
     }
 
     @Test
-    void test_get_find_by_id_receitas() throws URISyntaxException {
+    void test_get_find_by_id_receitas() {
         DespesaDTO despesaDTO = new DespesaDTO(despesa);
         when(service.getById(any(Long.class))).thenReturn(ResponseEntity.ok().body(despesaDTO));
         ResponseEntity<DespesaDTO> responseEntity = service.getById(1L);
@@ -52,25 +50,24 @@ class DespesaServiceTest {
     }
 
     @Test
-    void test_not_get_find_by_id_receitas_is_not_found() throws URISyntaxException {
+    void test_not_get_find_by_id_receitas_is_not_found() {
         when(service.getById(any(Long.class))).thenReturn(ResponseEntity.notFound().build());
-        ResponseEntity responseEntity = service.getById(99L);
+        ResponseEntity<DespesaDTO> responseEntity = service.getById(99L);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
     @Test
     void test_delete_ok_receita_exists() {
-        when(service.delete(any(Long.class))).thenReturn(ResponseEntity.status(HttpStatus.OK).body("despesa deleted"));
-        ResponseEntity responseEntity = service.delete(1L);
+        when(service.delete(any(Long.class))).thenReturn(ResponseEntity.ok().build());
+        ResponseEntity<HttpStatus> responseEntity = service.delete(1L);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
     }
 
     @Test
     void test_not_delete_receita_exists_is_false() {
-        when(service.delete(2L)).thenReturn(ResponseEntity.status(404).body("despesa not found"));
-        ResponseEntity responseEntity = service.delete(2L);
+        when(service.delete(2L)).thenReturn(ResponseEntity.notFound().build());
+        ResponseEntity<HttpStatus> responseEntity = service.delete(2L);
         Assertions.assertEquals(responseEntity.getStatusCode(),  HttpStatus.NOT_FOUND);
-        Assertions.assertNotEquals(responseEntity.getBody(), "despesa deleted");
     }
 
 }

@@ -5,6 +5,7 @@ import com.challenger.finance.web.dto.ReceitaDto;
 import com.challenger.finance.web.form.ReceitaForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +26,7 @@ public class ControllerReceita {
 
     @PostMapping("/receita")
     @Transactional
-    public ResponseEntity create(@RequestBody ReceitaForm receitaForm) {
+    public ResponseEntity<HttpStatus> create(@RequestBody ReceitaForm receitaForm) {
         return service.save(receitaForm);
     }
 

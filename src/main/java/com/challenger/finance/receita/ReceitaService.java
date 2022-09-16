@@ -45,9 +45,9 @@ public class ReceitaService {
         }
     }
 
-    public ResponseEntity save(ReceitaForm receita) {
+    public ResponseEntity<HttpStatus> save(ReceitaForm receita) {
         try {
-            return new ResponseEntity(repository.save(new Receita(receita)), HttpStatus.CREATED);
+            return new ResponseEntity(repository.save(new Receita(receita)), HttpStatus.CREATED); //todo mapStruct
         } catch (Exception e) {
             logger.error(RECEITA_NOT_FOUND_EXCEPTION, receita.getDescricao(), e.getMessage());
             return ResponseEntity.badRequest().build();
@@ -94,12 +94,12 @@ public class ReceitaService {
         }
     }
 
-    public ResponseEntity delete(Long id) {
+    public ResponseEntity<HttpStatus> delete(Long id) {
         try {
             Optional<Receita> receita = repository.findById(id);
             if (receita.isPresent()) {
                 repository.delete(receita.get());
-                return ResponseEntity.status(200).body("receita deleted");
+                return new ResponseEntity<>(HttpStatus.OK);
             } else {
                 logger.info(RECEITA_NOT_FOUND, id);
                 return ResponseEntity.notFound().build();
