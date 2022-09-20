@@ -17,7 +17,7 @@ public class ControllerDespesa {
     @Autowired
     private DespesaService service;
 
-    @GetMapping("/despesa")
+    @GetMapping("/despesas")
     public ResponseEntity<List<DespesaDTO>> findAll(){
         return service.getAll();
     }

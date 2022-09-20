@@ -36,7 +36,6 @@ class ReceitaServiceTest {
         this.service = mock(ReceitaService.class);
         LocalDate date = LocalDate.of(2020, 1, 8);
         this.receita = new Receita(date, "Salario", new BigDecimal(1000));
-        this.receitaForm = new ReceitaForm(date, "Salario", new BigDecimal(1000));
         this.receitaForm = new ReceitaForm(date, "13 salario", new BigDecimal("1500"));
     }
 
@@ -71,6 +70,15 @@ class ReceitaServiceTest {
         when(service.save(any(ReceitaForm.class))).thenReturn(ResponseEntity.status(HttpStatus.CREATED).build());
         ResponseEntity<HttpStatus> responseEntity = service.save(receitaForm);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.CREATED);
+    }
+
+    @Test
+    void test_should_not_save_new_receita_when_description_exists() {
+        ReceitaForm receitaForm1 = new ReceitaForm(LocalDate.now(),"13 salario", new BigDecimal("10"));
+        when(service.save(receitaForm)).thenReturn(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build());
+        ResponseEntity<HttpStatus> responseEntity = service.save(receitaForm);
+        Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.INTERNAL_SERVER_ERROR);
+        Assertions.assertEquals(receitaForm1.getDescricao(), receitaForm.getDescricao());
     }
 
     @Test

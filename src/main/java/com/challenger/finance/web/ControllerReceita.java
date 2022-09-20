@@ -19,7 +19,7 @@ public class ControllerReceita {
     @Autowired
     private ReceitaService service;
 
-    @GetMapping("/receita")
+    @GetMapping("/receitas")
     public ResponseEntity<List<ReceitaDto>> findAll(){
         return service.getAll();
     }
