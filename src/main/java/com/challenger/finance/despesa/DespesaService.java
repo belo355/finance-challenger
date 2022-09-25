@@ -40,11 +40,15 @@ public class DespesaService {
         }
     }
 
-    public ResponseEntity<HttpStatus> save(DespesaForm despesa) {
+    public ResponseEntity save(DespesaForm despesa) {
         try {
+            Optional<Despesa> despesa1 = repository.findByDescricao(despesa.getDescricao());
+            if (despesa1.isPresent()) {
+                logger.info("Despesa exists");
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            }
             return new ResponseEntity(repository.save(new Despesa(despesa)), HttpStatus.CREATED);  //TODO: mapStruct
         } catch (Exception e) {
-            logger.error("Despesa not found {}", e.getMessage());
             return ResponseEntity.badRequest().build();
         }
     }
@@ -64,7 +68,7 @@ public class DespesaService {
         }
     }
 
-    public ResponseEntity<HttpStatus> delete(Long id) {
+    public ResponseEntity delete(Long id) {
         try {
             Optional<Despesa> despesa = repository.findById(id);
             if (despesa.isPresent()) {

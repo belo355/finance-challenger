@@ -7,5 +7,5 @@ import java.util.Optional;
 
 @Repository
 interface DespesaRepository extends CrudRepository<Despesa, Long> {
-    Optional<Despesa> findBydescricao(String descricao);
+    Optional<Despesa> findByDescricao(String descricao);
 }

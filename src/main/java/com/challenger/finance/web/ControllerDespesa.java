@@ -4,7 +4,6 @@ import com.challenger.finance.despesa.DespesaService;
 import com.challenger.finance.web.dto.DespesaDTO;
 import com.challenger.finance.web.form.DespesaForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +23,7 @@ public class ControllerDespesa {
 
     @PostMapping("/despesa")
     @Transactional
-    public ResponseEntity<HttpStatus> create(@RequestBody DespesaForm despesaForm){
+    public ResponseEntity create(@RequestBody DespesaForm despesaForm){
         return service.save(despesaForm);
     }
 
@@ -40,7 +39,7 @@ public class ControllerDespesa {
     }
     @DeleteMapping("/despesa/{id}")
     @Transactional
-    public ResponseEntity<HttpStatus> delete(@PathVariable Long id){
+    public ResponseEntity delete(@PathVariable Long id){
         return service.delete(id);
     }
 }
