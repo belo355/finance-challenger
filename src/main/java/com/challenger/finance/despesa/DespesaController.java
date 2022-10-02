@@ -1,8 +1,7 @@
-package com.challenger.finance.web;
+package com.challenger.finance.despesa;
 
-import com.challenger.finance.despesa.DespesaService;
-import com.challenger.finance.web.dto.DespesaDTO;
-import com.challenger.finance.web.form.DespesaForm;
+import com.challenger.finance.despesa.dto.DespesaDto;
+import com.challenger.finance.despesa.form.DespesaForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,13 +10,13 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
-public class ControllerDespesa {
+public class DespesaController {
 
     @Autowired
     private DespesaService service;
 
     @GetMapping("/despesas")
-    public ResponseEntity<List<DespesaDTO>> findAll(){
+    public ResponseEntity<List<DespesaDto>> findAll(){
         return service.getAll();
     }
 
@@ -28,13 +27,13 @@ public class ControllerDespesa {
     }
 
     @GetMapping("/despesa/{id}")
-    public ResponseEntity<DespesaDTO> findbyId(@PathVariable Long id){
+    public ResponseEntity findbyId(@PathVariable Long id){
         return service.getById(id);
     }
 
     @PutMapping("/despesa/{id}")
     @Transactional
-    public ResponseEntity<DespesaDTO> update(@PathVariable Long id, @RequestBody DespesaForm despesaForm){
+    public ResponseEntity<DespesaDto> update(@PathVariable Long id, @RequestBody DespesaForm despesaForm){
         return service.update(id, despesaForm);
     }
     @DeleteMapping("/despesa/{id}")

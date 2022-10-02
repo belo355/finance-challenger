@@ -1,7 +1,8 @@
 package com.challenger.finance.despesa;
 
-import com.challenger.finance.web.dto.DespesaDTO;
-import com.challenger.finance.web.form.DespesaForm;
+import com.challenger.finance.despesa.dto.DespesaDto;
+import com.challenger.finance.despesa.dto.DespesaMapper;
+import com.challenger.finance.despesa.form.DespesaForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,24 +20,27 @@ public class DespesaService {
 
     private static final Logger logger = LoggerFactory.getLogger(DespesaService.class);
     private final DespesaRepository repository;
+    private final DespesaMapper mapper;
+
 
     private final String DESPESA_NOT_FOUND_EXCEPTION = "despesa not found {} {}";
     private final String DESPESA_NOT_FOUND = "despesa not found {}";
 
     @Autowired
-    public DespesaService(DespesaRepository repository){
+    public DespesaService(DespesaRepository repository, DespesaMapper mapper){
         this.repository = repository;
+        this.mapper = mapper;
     }
 
-    public ResponseEntity<List<DespesaDTO>> getAll() {
+    public ResponseEntity<List<DespesaDto>> getAll() {
         Optional<List<Despesa>> despesas = Optional.of((List<Despesa>) repository.findAll());
         if (despesas.get().isEmpty()) {
             logger.info("despesas not found");
             return ResponseEntity.notFound().build();
         } else {
-            List<DespesaDTO> despesaDTOS = new ArrayList<>();
-            despesas.get().stream().map(despesa -> despesaDTOS.add(new DespesaDTO(despesa))).collect(Collectors.toList());
-            return despesas.map(dp -> ResponseEntity.ok().body(despesaDTOS)).orElseGet(() -> ResponseEntity.notFound().build());
+            List<DespesaDto> despesaDtos = new ArrayList<>();
+            despesas.get().stream().map(despesa -> despesaDtos.add(new DespesaDto(despesa))).collect(Collectors.toList());
+            return despesas.map(dp -> ResponseEntity.ok().body(despesaDtos)).orElseGet(() -> ResponseEntity.notFound().build());
         }
     }
 
@@ -53,17 +57,17 @@ public class DespesaService {
         }
     }
 
-    public ResponseEntity<DespesaDTO> getById(Long id) {
+    public ResponseEntity getById(Long id) {
         try {
             Optional<Despesa> despesa = repository.findById(id);
             if (despesa.isPresent()) {
-                return despesa.map(dp -> ResponseEntity.ok(new DespesaDTO(dp))).orElseGet(() -> ResponseEntity.notFound().build());
+                return ResponseEntity.ok().build();
             } else {
                 logger.info(DESPESA_NOT_FOUND, id);
                 return ResponseEntity.notFound().build();
             }
         } catch (Exception e) {
-            logger.error(DESPESA_NOT_FOUND_EXCEPTION, id, e.getMessage());
+            logger.error(DESPESA_NOT_FOUND_EXCEPTION, id, e.getCause());
             return ResponseEntity.badRequest().build();
         }
     }
@@ -84,13 +88,13 @@ public class DespesaService {
         }
     }
 
-    public ResponseEntity<DespesaDTO> update(Long id, DespesaForm despesaForm) {
+    public ResponseEntity<DespesaDto> update(Long id, DespesaForm despesaForm) {
         try {
             Optional<Despesa> despesa = repository.findById(id);
             if (despesa.isPresent()) {
                 udpateDespesa(despesa, despesaForm);
                 repository.save(despesa.get());
-                return ResponseEntity.ok().body(new DespesaDTO(despesa.get()));
+                return ResponseEntity.ok().body(new DespesaDto(despesa.get()));
             } else {
                 logger.info(DESPESA_NOT_FOUND, id);
                 return ResponseEntity.notFound().build();
@@ -102,10 +106,10 @@ public class DespesaService {
     }
 
     private void udpateDespesa(Optional<Despesa> despesa, DespesaForm despesaForm) {
-        if(despesa.isPresent()){
-            despesa.get().setDescricao(despesaForm.getDescricao());
-            despesa.get().setValor(despesaForm.getValor());
-            despesa.get().setDataDespesa(despesaForm.getDataReceita());
-        }
+//        if(despesa.isPresent()){
+//            despesa.get().setDescricao(despesaForm.getDescricao());
+//            despesa.get().setValor(despesaForm.getValor());
+//            despesa.get().setDataDespesa(despesaForm.getDataReceita());
+//        }
     }
 }

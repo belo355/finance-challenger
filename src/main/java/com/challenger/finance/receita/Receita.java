@@ -1,7 +1,6 @@
 package com.challenger.finance.receita;
 
-import com.challenger.finance.web.form.ReceitaForm;
-import lombok.Data;
+import com.challenger.finance.receita.form.ReceitaForm;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,28 +9,27 @@ import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data
 @Entity
 public class Receita {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long receitaId;
+    private Long id;
 
-    private LocalDate dataReceita;
+    private LocalDate data;
     private String descricao;
     private BigDecimal valor;
 
     public Receita(){}
 
     public Receita(ReceitaForm receitaForm) {
-        this.dataReceita = receitaForm.getDataReceita();
+        this.data = receitaForm.getData();
         this.descricao = receitaForm.getDescricao();
         this.valor = receitaForm.getValor();
     }
 
     public Receita(LocalDate date, String descricao, BigDecimal valor) {
-        this.dataReceita = date;
+        this.data = date;
         this.descricao = descricao;
         this.valor = valor;
     }
@@ -39,10 +37,25 @@ public class Receita {
     @Override
     public String toString() {
         return "Receita{" +
-                "dataReceita=" + dataReceita +
+                "dataReceita=" + data +
                 ", descricao='" + descricao + '\'' +
                 ", valor=" + valor +
                 '}';
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public LocalDate getData() {
+        return data;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
+    }
 }

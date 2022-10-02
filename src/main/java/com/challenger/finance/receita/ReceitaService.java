@@ -1,7 +1,7 @@
 package com.challenger.finance.receita;
 
-import com.challenger.finance.web.dto.ReceitaDto;
-import com.challenger.finance.web.form.ReceitaForm;
+import com.challenger.finance.receita.dto.ReceitaDto;
+import com.challenger.finance.receita.form.ReceitaForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -96,11 +96,11 @@ public class ReceitaService {
     }
 
     private void updatedReceita(Optional<Receita> receitaUpdate, ReceitaForm receitaForm) {
-        if (receitaUpdate.isPresent()) {
-            receitaUpdate.get().setDataReceita(receitaForm.getDataReceita());
-            receitaUpdate.get().setDescricao(receitaForm.getDescricao());
-            receitaUpdate.get().setValor(receitaForm.getValor());
-        }
+//        if (receitaUpdate.isPresent()) {
+//            receitaUpdate.get().setDataReceita(receitaForm.getDataReceita());
+//            receitaUpdate.get().setDescricao(receitaForm.getDescricao());
+//            receitaUpdate.get().setValor(receitaForm.getValor());
+//        }
     }
 
     public ResponseEntity<HttpStatus> delete(Long id) {

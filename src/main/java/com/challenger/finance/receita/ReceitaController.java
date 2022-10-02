@@ -1,8 +1,7 @@
-package com.challenger.finance.web;
+package com.challenger.finance.receita;
 
-import com.challenger.finance.receita.ReceitaService;
-import com.challenger.finance.web.dto.ReceitaDto;
-import com.challenger.finance.web.form.ReceitaForm;
+import com.challenger.finance.receita.dto.ReceitaDto;
+import com.challenger.finance.receita.form.ReceitaForm;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,7 +13,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
-public class ControllerReceita {
+public class ReceitaController {
 
     @Autowired
     private ReceitaService service;

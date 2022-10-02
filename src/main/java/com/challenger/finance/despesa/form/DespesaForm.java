@@ -1,23 +1,23 @@
-package com.challenger.finance.web.form;
+package com.challenger.finance.despesa.form;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 public class DespesaForm {
-    private LocalDate dataReceita;
+    private LocalDate data;
     private String descricao;
-    private DespesaCategoriaEnum categoriaEnum;
+    private DespesaCategoriaEnum categoria;
     private BigDecimal valor;
 
     public DespesaForm(LocalDate date, String descricao, DespesaCategoriaEnum categoriaEnum, BigDecimal valor) {
-        this.dataReceita = date;
+        this.data = date;
         this.descricao = descricao;
-        this.categoriaEnum = categoriaEnum;
+        this.categoria = categoriaEnum;
         this.valor = valor;
     }
 
-    public LocalDate getDataReceita() {
-        return dataReceita;
+    public LocalDate getData() {
+        return data;
     }
 
     public String getDescricao() {
@@ -28,8 +28,8 @@ public class DespesaForm {
         return valor;
     }
 
-    public DespesaCategoriaEnum getCategoriaEnum() {
-        return categoriaEnum;
+    public DespesaCategoriaEnum getCategoria() {
+        return categoria;
     }
 
 }

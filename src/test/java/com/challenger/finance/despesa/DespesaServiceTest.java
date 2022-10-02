@@ -1,7 +1,7 @@
 package com.challenger.finance.despesa;
 
-import com.challenger.finance.web.dto.DespesaDTO;
-import com.challenger.finance.web.form.DespesaCategoriaEnum;
+import com.challenger.finance.despesa.dto.DespesaDto;
+import com.challenger.finance.despesa.form.DespesaCategoriaEnum;
 import org.junit.jupiter.api.*;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
@@ -32,19 +32,19 @@ class DespesaServiceTest {
 
     @Test
     void test_get_all_despesa() {
-        List<DespesaDTO> despesas = new ArrayList<>() ;
-        despesas.add(new DespesaDTO(this.despesa));
+        List<DespesaDto> despesas = new ArrayList<>() ;
+        despesas.add(new DespesaDto(this.despesa));
         when(service.getAll()).thenReturn(ResponseEntity.ok().body(despesas));
-        ResponseEntity<List<DespesaDTO>> responseEntityDespesas = service.getAll();
+        ResponseEntity<List<DespesaDto>> responseEntityDespesas = service.getAll();
         Assertions.assertEquals(responseEntityDespesas.getStatusCode(), HttpStatus.OK);
         Assertions.assertEquals("Condominio", responseEntityDespesas.getBody().get(0).getDescricao());
     }
 
     @Test
     void test_get_find_by_id_receitas() {
-        DespesaDTO despesaDTO = new DespesaDTO(despesa);
+        DespesaDto despesaDTO = new DespesaDto(despesa);
         when(service.getById(any(Long.class))).thenReturn(ResponseEntity.ok().body(despesaDTO));
-        ResponseEntity<DespesaDTO> responseEntity = service.getById(1L);
+        ResponseEntity<DespesaDto> responseEntity = service.getById(1L);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.OK);
         Assertions.assertEquals(Objects.requireNonNull(responseEntity.getBody()).getDescricao(), "Condominio");
     }
@@ -52,7 +52,7 @@ class DespesaServiceTest {
     @Test
     void test_not_get_find_by_id_receitas_is_not_found() {
         when(service.getById(any(Long.class))).thenReturn(ResponseEntity.notFound().build());
-        ResponseEntity<DespesaDTO> responseEntity = service.getById(99L);
+        ResponseEntity<DespesaDto> responseEntity = service.getById(99L);
         Assertions.assertEquals(responseEntity.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 

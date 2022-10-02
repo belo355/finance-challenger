@@ -1,8 +1,7 @@
 package com.challenger.finance.despesa;
 
-import com.challenger.finance.web.form.DespesaCategoriaEnum;
-import com.challenger.finance.web.form.DespesaForm;
-import lombok.Data;
+import com.challenger.finance.despesa.form.DespesaCategoriaEnum;
+import com.challenger.finance.despesa.form.DespesaForm;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,41 +10,56 @@ import javax.persistence.Id;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-@Data
 @Entity
 public class Despesa {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long despesaId;
+    private Long id;
 
-    private LocalDate dataDespesa;
+    private LocalDate data;
     private String descricao;
-    private DespesaCategoriaEnum categoriaEnum; 
+    private DespesaCategoriaEnum categoriaEnum;
     private BigDecimal valor;
 
     public Despesa(){}
-    public Despesa(LocalDate dataDespesa, String descricao, DespesaCategoriaEnum categoriaEnum, BigDecimal valor){
-        this.dataDespesa = dataDespesa;
+    public Despesa(LocalDate data, String descricao, DespesaCategoriaEnum categoriaEnum, BigDecimal valor){
+        this.data = data;
         this.descricao = descricao;
         this.categoriaEnum = categoriaEnum;
         this.valor = valor;
     }
 
     public Despesa(DespesaForm despesaForm) {
-        this.dataDespesa = despesaForm.getDataReceita();
+        this.data = despesaForm.getData();
         this.descricao = despesaForm.getDescricao();
-        this.categoriaEnum = despesaForm.getCategoriaEnum();
+        this.categoriaEnum = despesaForm.getCategoria();
         this.valor = despesaForm.getValor();
     }
 
     @Override
     public String toString() {
         return "Despesa{" +
-                "despesaId=" + despesaId +
-                ", dataDespesa=" + dataDespesa +
+                "despesaId=" + id +
+                ", dataDespesa=" + data +
                 ", descricao='" + descricao + '\'' +
                 ", valor=" + valor +
                 '}';
+    }
+
+    public LocalDate getData() {
+        return data;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public DespesaCategoriaEnum getCategoriaEnum() {
+        return categoriaEnum;
+    }
+
+    public BigDecimal getValor() {
+        return valor;
     }
 }

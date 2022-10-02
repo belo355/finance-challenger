@@ -1,7 +1,7 @@
 package com.challenger.finance.receita;
 
-import com.challenger.finance.web.dto.ReceitaDto;
-import com.challenger.finance.web.form.ReceitaForm;
+import com.challenger.finance.receita.dto.ReceitaDto;
+import com.challenger.finance.receita.form.ReceitaForm;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
