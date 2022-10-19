@@ -1,5 +1,7 @@
 package com.challenger.finance.despesa.form;
 
+import com.challenger.finance.despesa.DespesaCategoriaEnum;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -9,10 +11,11 @@ public class DespesaForm {
     private DespesaCategoriaEnum categoria;
     private BigDecimal valor;
 
-    public DespesaForm(LocalDate date, String descricao, DespesaCategoriaEnum categoriaEnum, BigDecimal valor) {
+    public DespesaForm(){}
+    public DespesaForm(LocalDate date, String descricao, DespesaCategoriaEnum categoria, BigDecimal valor) {
         this.data = date;
         this.descricao = descricao;
-        this.categoria = categoriaEnum;
+        this.categoria = categoria;
         this.valor = valor;
     }
 

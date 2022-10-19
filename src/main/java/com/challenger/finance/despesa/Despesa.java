@@ -1,6 +1,5 @@
 package com.challenger.finance.despesa;
 
-import com.challenger.finance.despesa.form.DespesaCategoriaEnum;
 import com.challenger.finance.despesa.form.DespesaForm;
 
 import javax.persistence.Entity;

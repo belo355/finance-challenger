@@ -9,6 +9,7 @@ public class DespesaDto {
     private String descricao;
     private BigDecimal valor;
 
+    public DespesaDto() {}
     public DespesaDto(Despesa despesa) {
         this.descricao = despesa.getDescricao();
         this.valor = despesa.getValor();

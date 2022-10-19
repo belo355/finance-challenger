@@ -1,7 +1,6 @@
 package com.challenger.finance.despesa;
 
 import com.challenger.finance.despesa.dto.DespesaDto;
-import com.challenger.finance.despesa.dto.DespesaMapper;
 import com.challenger.finance.despesa.form.DespesaForm;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,16 +19,13 @@ public class DespesaService {
 
     private static final Logger logger = LoggerFactory.getLogger(DespesaService.class);
     private final DespesaRepository repository;
-    private final DespesaMapper mapper;
-
 
     private final String DESPESA_NOT_FOUND_EXCEPTION = "despesa not found {} {}";
     private final String DESPESA_NOT_FOUND = "despesa not found {}";
 
     @Autowired
-    public DespesaService(DespesaRepository repository, DespesaMapper mapper){
+    public DespesaService(DespesaRepository repository){
         this.repository = repository;
-        this.mapper = mapper;
     }
 
     public ResponseEntity<List<DespesaDto>> getAll() {
@@ -44,31 +40,31 @@ public class DespesaService {
         }
     }
 
-    public ResponseEntity save(DespesaForm despesa) {
+    public Despesa save(Despesa despesa) {
         try {
-            Optional<Despesa> despesa1 = repository.findByDescricao(despesa.getDescricao());
-            if (despesa1.isPresent()) {
-                logger.info("Despesa exists");
-                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-            }
-            return new ResponseEntity(repository.save(new Despesa(despesa)), HttpStatus.CREATED);  //TODO: mapStruct
+            return repository.save(despesa);
         } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+            logger.error("Erro ao cadastrar nova despesa: {} , cause: {}", despesa.getDescricao(), e.getCause());
+            return null;
         }
     }
 
-    public ResponseEntity getById(Long id) {
+    public Optional<Despesa> getByDescription(String description) {
+        return repository.findByDescricao(description);
+    }
+
+    public Optional<Despesa> getById(Long id) {
         try {
             Optional<Despesa> despesa = repository.findById(id);
-            if (despesa.isPresent()) {
-                return ResponseEntity.ok().build();
-            } else {
+            if (!despesa.isPresent()) {
                 logger.info(DESPESA_NOT_FOUND, id);
-                return ResponseEntity.notFound().build();
+                return despesa;
             }
+            logger.info("retornando Despesa encontrada: {}", despesa.get());
+            return Optional.empty();
         } catch (Exception e) {
             logger.error(DESPESA_NOT_FOUND_EXCEPTION, id, e.getCause());
-            return ResponseEntity.badRequest().build();
+            return Optional.empty();
         }
     }
 
